@@ -1,0 +1,18 @@
+p //points. If no third coordinate is specified, it will default to 0.0.
+0 0 0
+1 2
+4 5
+
+s //segments
+-5 0
+-5 10 0
+
+t //triangles
+5 5
+5 -5
+10 0
+
+c //circles
+0 5
+5 0
+-5 0

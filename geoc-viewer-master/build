@@ -1,0 +1,45 @@
+#!/bin/bash
+
+set -e
+
+EXERCISES_DIR=exercises
+DEMOS_DIR=demos
+CGAL_DIR=CGAL-3.8
+
+command_test() {
+        command -v $1 >/dev/null 2>&1
+}
+
+command_test qmake-qt4 && QMAKE=qmake-qt4 || QMAKE=qmake
+
+build() {
+	for d in "$@"; do
+		[ ! -f $d/example.pro ] && continue
+		echo $d
+		pushd $d >/dev/null
+		if [ ! -f Makefile ]; then
+			$QMAKE
+		fi
+		make -j4 -s
+		popd >/dev/null
+	done
+}
+
+if [ ! -f $CGAL_DIR/lib/libCGAL.so ]; then
+	echo cgal
+	pushd $CGAL_DIR >/dev/null
+	cmake . -Wno-dev >/dev/null
+	make -j4 -s >/dev/null
+	popd >/dev/null
+fi
+
+echo libgeoc
+if [ ! -f Release.mk ]; then
+	$QMAKE CONFIG=release -o Release.mk
+	mkdir -p Release
+fi
+make -f Release.mk -j4 -s
+
+build exercises/*
+build demos/*
+build demos/make_grid/*

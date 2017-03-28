@@ -1,0 +1,3 @@
+#!/bin/bash
+
+LD_LIBRARY_PATH=bin:CGAL-3.8/lib:$LD_LIBRARY_PATH "${@}"
